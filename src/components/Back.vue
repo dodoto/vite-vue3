@@ -91,9 +91,9 @@ export default {
   position:fixed;
   z-index: 1;
   left:0; top:0; right:0;
-  height: 100px;
+  height: 70px;
   padding-left: 200px;
-  background-color: #fff;
+  background-color: #1976d2;
   box-shadow: 0 0 2px 1px #aaa;
 }
 
@@ -101,12 +101,13 @@ export default {
   float: left;
   height: 100%;
   line-height: 100px;
+  color: #fff;
 }
 
 .main {
   position:absolute;
   left:200px; top:0; right:0; bottom:0;
-  padding-top: 100px;
+  padding-top: 70px;
 }
 
 @media screen and (max-width: 500px){
