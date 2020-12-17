@@ -16,7 +16,7 @@
 <script>
 import { useRef } from '../hooks/ref/index'
 import { usePush, useRouteName } from '../hooks/router/index'
-import { useEvent } from '../hooks/event/index'
+import { useEvent, useResizeObserver } from '../hooks/event/index'
 export default {
   name: 'Back',
   setup() {
@@ -34,7 +34,9 @@ export default {
         ref.value.classList.remove('show')
       }
     }
-    useEvent('resize',windowSizeChange)
+   
+    // useEvent('resize',windowSizeChange)  
+    useResizeObserver(windowSizeChange,document.body)
     return {
       push,
       routeName,
