@@ -62,6 +62,7 @@ export default {
 .link {
   cursor: pointer;
   text-decoration: none;
+  text-indent: 1ch;
   padding: 20px 0;
   opacity: 1;
   background-color: #fafafa;
