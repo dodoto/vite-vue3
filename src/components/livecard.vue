@@ -1,10 +1,10 @@
 <template>
   <div style="position:relative;width:100%;height:100%;" ref="box">
-    
     <div 
       class="card" 
       :style="{top:top+'px',transition: isAnimating && 'all 400ms linear'}"
       >占位图
+      <p v-show="activeIndex === 0 && !isAnimating" class="limit-tip" style="bottom:0;">到头了</p>
     </div>
     <div 
       class="card" 
@@ -13,13 +13,15 @@
           {{testData[activeIndex].text}}
     </div>
     <div 
+      
       class="card" 
       :style="{top:top+'px',transition: isAnimating && 'all 400ms linear'}"
       >
+      <p v-show="activeIndex === max  && !isAnimating" class="limit-tip" style="top:0;">到尾了</p>
       占位图
     </div>
-      <p class="limit-tip">到头了</p>
-      <p class="limit-tip">到尾了</p>
+    
+    
   </div>  
 </template>
 
@@ -65,10 +67,12 @@ export default {
 			},
 			touchMove:function(e){
         e.preventDefault();
-				if(this.isAnimating)return;
+        if(this.isAnimating)return;
 				
-				var curTouch=e.touches[0];
-				this.top=curTouch.clientY-this.startTop;
+        var curTouch=e.touches[0];
+        this.top=curTouch.clientY-this.startTop;
+        if(this.activeIndex === 0 && this.top > 100) this.top = 100;
+        if(this.activeIndex === this.max && this.top < -100) this.top = -100; 
 				this.onDragMove({left:0,top:this.top});
 			},
 			touchCancel:function(e){
@@ -80,17 +84,17 @@ export default {
 				var that=this;
         var curTouch=e.touches[0];
         let box = this.$refs['box'];
-        if(this.top > box.clientHeight/4) {
+        if(this.top > box.clientHeight/4 && this.activeIndex > 0 ) {
           this.top = box.clientHeight
           console.log('pull down')
-          this.activeIndex > 0 && this.activeIndex--
+          this.activeIndex--
           this.reset()
           return
         }
-        if(this.top < -box.clientHeight/4) {
+        if(this.top < -box.clientHeight/4 && this.activeIndex < this.max) {
           this.top = -box.clientHeight
           console.log('pull up')
-          this.activeIndex < this.max && this.activeIndex++
+          this.activeIndex++
           this.reset()
           return
         }
@@ -102,7 +106,6 @@ export default {
       
       reset: function(){
         setTimeout(()=>{
-          // console.log(23423)
           this.isAnimating = false
           this.top = 0
         },500)
@@ -140,32 +143,23 @@ export default {
 }
 
 .card:nth-child(1) {
-  background-color:yellow;
+  /* background-color:yellow; */
   transform: translateY(-100%);
 }
 
 .card:nth-child(2) {
-  background-color:skyblue;
+  /* background-color:skyblue; */
   transform: translateY(0);
 }
 
 .card:nth-child(3) {
-  background-color:aqua;
+  /* background-color:aqua; */
   transform: translateY(100%);
 }
 
 .limit-tip {
-  position: absolute;
-  width: 100%;
   text-align: center;
-  /* z-index: -1; */
-}
-
-.limit-tip:first-child {
-  top: 0;
-}
-
-.limit-tip:last-child {
-  bottom: 0;
+  width: 100%;
+  position: absolute;
 }
 </style>
