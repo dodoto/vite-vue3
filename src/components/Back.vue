@@ -1,8 +1,22 @@
 <template>
   
-  <div class="side" :ref="setRef">
-    <div @click="push('/list')" :class="routeName === 'list' ? 'link active' : 'link'">list</div>
-    <div @click="push('/info')" :class="routeName === 'info' ? 'link active' : 'link'">info</div>
+  <div class="side" :ref="setRef"  @click="sideToggle">
+    <div 
+      @click="push('/list')" 
+      class=" hover:text-gray-700 pl-4 h-12 leading-12 text-gray-500 font-sans font-medium cursor-pointer text-sm" 
+      :class="routeName === 'list' && ' text-blue-600 bg-blue-500 bg-opacity-25 hover:text-blue-600' "
+    >
+      Font Family
+    </div>
+    <div 
+      @click="push('/info')"
+      class=" hover:text-gray-700 pl-4 h-12 leading-12 text-gray-500 font-sans font-medium cursor-pointer text-sm" 
+      :class="routeName === 'info' && ' text-blue-600 bg-blue-500 bg-opacity-25 hover:text-blue-600' "
+    >
+      info
+    </div>
+    <!-- <div @click="push('/list')" :class="routeName === 'list' ? 'link active' : 'link'">list</div>
+    <div @click="push('/info')" :class="routeName === 'info' ? 'link active' : 'link'">info</div> -->
   </div>
   <div class="head">
     <div class="side-switch" @click="sideToggle" >click to show side</div>
@@ -59,7 +73,7 @@ export default {
   transition: transform 300ms linear;
 }
 
-.link {
+/* .link {
   cursor: pointer;
   text-decoration: none;
   text-indent: 1ch;
@@ -67,9 +81,9 @@ export default {
   opacity: 1;
   background-color: #fafafa;
   transition: all 300ms linear;
-}
+} */
 
-.link:hover {
+/* .link:hover {
   opacity: .5;
   color: #fff;
   background-color: #a3a3a3;
@@ -88,14 +102,13 @@ export default {
   top: 0; left: 0; bottom: 0;
   width: 4px;
   background-color: #939393;
-}
+} */
 
 .head {
   position:fixed;
   z-index: 1;
   left:0; top:0; right:0;
   height: 70px;
-  padding-left: 200px;
   background-color: #1976d2;
   box-shadow: 0 0 2px 1px #aaa;
 }
@@ -122,5 +135,6 @@ export default {
 
 .show {
   transform: translateX(0);
+  /* box-shadow: 200px 0 1px 10px rgba(0,0,0,.2); */
 }
 </style>

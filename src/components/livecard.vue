@@ -84,14 +84,14 @@ export default {
 				var that=this;
         var curTouch=e.touches[0];
         let box = this.$refs['box'];
-        if(this.top > box.clientHeight/4 && this.activeIndex > 0 ) {
+        if(this.top > 200 && this.activeIndex > 0 ) {
           this.top = box.clientHeight
           console.log('pull down')
           this.activeIndex--
           this.reset()
           return
         }
-        if(this.top < -box.clientHeight/4 && this.activeIndex < this.max) {
+        if(this.top < -200 && this.activeIndex < this.max) {
           this.top = -box.clientHeight
           console.log('pull up')
           this.activeIndex++
@@ -143,17 +143,17 @@ export default {
 }
 
 .card:nth-child(1) {
-  /* background-color:yellow; */
+  background-color:yellow;
   transform: translateY(-100%);
 }
 
 .card:nth-child(2) {
-  /* background-color:skyblue; */
+  background-color:skyblue;
   transform: translateY(0);
 }
 
 .card:nth-child(3) {
-  /* background-color:aqua; */
+  background-color:aqua;
   transform: translateY(100%);
 }
 

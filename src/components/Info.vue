@@ -2,6 +2,25 @@
   <div style="height:200vh;">
     <div class="img"></div>
     <h4>this is info page</h4>
+    <button 
+      class="
+      bg-green-400
+        py-2 
+        px-4 
+        bg-emerald-500 
+      text-white 
+        font-semibold 
+        rounded-lg 
+        shadow-md 
+      hover:bg-green-500
+        focus:outline-none
+        focus:ring-4 
+        focus:ring-green-500
+        focus:ring-opacity-50
+      "
+    >
+  Hover me
+</button>
   </div>
 </template>
 
