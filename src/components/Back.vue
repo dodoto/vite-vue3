@@ -15,11 +15,14 @@
     >
       info
     </div>
-    <!-- <div @click="push('/list')" :class="routeName === 'list' ? 'link active' : 'link'">list</div>
-    <div @click="push('/info')" :class="routeName === 'info' ? 'link active' : 'link'">info</div> -->
+
   </div>
   <div class="head">
-    <div class="side-switch" @click="sideToggle" >click to show side</div>
+    <div class="float-left m-5" @click="sideToggle" >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </div>
   </div>  
   <div class="main">
     <router-view />
@@ -73,37 +76,6 @@ export default {
   transition: transform 300ms linear;
 }
 
-/* .link {
-  cursor: pointer;
-  text-decoration: none;
-  text-indent: 1ch;
-  padding: 20px 0;
-  opacity: 1;
-  background-color: #fafafa;
-  transition: all 300ms linear;
-} */
-
-/* .link:hover {
-  opacity: .5;
-  color: #fff;
-  background-color: #a3a3a3;
-}
-
-.active {
-  color: #fff;
-  background-color: #b3b3b3;
-  position: relative;
-}
-
-.active::after {
-  content: '';
-  display: block;
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
-  width: 4px;
-  background-color: #939393;
-} */
-
 .head {
   position:fixed;
   z-index: 1;
@@ -111,13 +83,6 @@ export default {
   height: 70px;
   background-color: #1976d2;
   box-shadow: 0 0 2px 1px #aaa;
-}
-
-.side-switch {
-  float: left;
-  height: 100%;
-  line-height: 100px;
-  color: #fff;
 }
 
 .main {
