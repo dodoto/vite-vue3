@@ -26,6 +26,11 @@ export const router = createRouter({
       ]
     },
     {
+      path: '/upload',
+      name: 'upload',
+      component: () => import('../components/upload.vue')
+    },
+    {
       path: '/:w+',
       component: () => import('../components/NotFound.vue')
     }
