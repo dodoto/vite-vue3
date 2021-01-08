@@ -7,6 +7,10 @@ module.exports = {
         '12': '3rem',
       }
     },
+    backgroundColor: theme => ({
+      // ...theme('colors'),
+      'slategrey': '#708090'
+    })
   },
   variants: {
     extend: {},

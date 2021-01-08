@@ -143,7 +143,6 @@ function UPLOAD(formData) {
     aixos.post(URL,formData,CONFIG)
     .then(res => resolve(res.data))
     .catch(err => reject(err))
-
     // .then(res => {
     //   if(res.data.code === 200) {
     //     resolve(res.data)
@@ -192,6 +191,3 @@ export function uploadTest(file) {
     upload(file,md5);
   });
 }
-
-
-

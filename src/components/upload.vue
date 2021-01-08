@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="container bg-blue-200 m-auto h-full">
     <!-- <UploadItem  v-for="item of uploadItems" :key="item.name" :uploadItemData="item"/> -->
     <label 
       for="upload"
       class="
         block
         w-24
-      bg-green-400
+        bg-green-400
         py-2 
         text-center
         mx-auto
@@ -15,7 +15,7 @@
         font-semibold 
         rounded-lg 
         shadow-md 
-      hover:bg-green-500
+        hover:bg-green-500
       "
     >
       upload
