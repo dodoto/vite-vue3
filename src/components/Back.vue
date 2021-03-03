@@ -1,33 +1,28 @@
 <template>
-  
-  <div class="side" :ref="setRef"  @click="sideToggle">
-    <div 
-      @click="push('/list')" 
-      class=" hover:text-gray-700 pl-4 h-12 leading-12 text-gray-500 font-sans font-medium cursor-pointer text-sm" 
-      :class="routeName === 'list' && ' text-blue-600 bg-blue-500 bg-opacity-25 hover:text-blue-600' "
-    >
-      Font Family
+  <div>
+    <input type="checkbox" id="menu-show" class="hidden">
+    <div class="side" :ref="setRef" >
+      <div
+        v-for="route of routes"
+        :key="route.path" 
+        @click="push(route.path)"
+        class="uppercase tracking-wide font-semibold hover:text-gray-500 pl-4 h-12 leading-12 text-gray-400 font-sans cursor-pointer text-sm" 
+        :class="route.name === routeName && ' uppercase tracking-wide font-semibold text-blue-500 bg-blue-400 bg-opacity-25 hover:text-blue-500' "
+      >
+        {{route.label}}
+      </div>
     </div>
-    <div 
-      @click="push('/info')"
-      class=" hover:text-gray-700 pl-4 h-12 leading-12 text-gray-500 font-sans font-medium cursor-pointer text-sm" 
-      :class="routeName === 'info' && ' text-blue-600 bg-blue-500 bg-opacity-25 hover:text-blue-600' "
-    >
-      info
+    <div class="head">
+      <div class="float-left m-4 sm:hidden  w-10 h-10 leading-10 text-center ">
+        <label class="cursor-pointer text-white hover:text-blue-100 " for="menu-show">
+          <i class="fa fa-bars fa-lg"></i>
+        </label>
+      </div>
+    </div>  
+    <div class="main">
+      <router-view />
     </div>
-
   </div>
-  <div class="head">
-    <div class="float-left m-5" @click="sideToggle" >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </div>
-  </div>  
-  <div class="main">
-    <router-view />
-  </div>
-  
 </template>
 
 <script>
@@ -40,24 +35,15 @@ export default {
     const push  = usePush()
     const routeName = useRouteName()
     let { ref, setRef } = useRef()
-    const sideToggle = () => {
-      let dom = ref.value
-      let className = dom.classList[1];
-      className === 'show' ? 
-      dom.classList.remove('show') : dom.classList.add('show')
-    }
-    const windowSizeChange = () => {
-      if(ref.value.classList[1] === 'show') {
-        ref.value.classList.remove('show')
-      }
-    }
-   
-    // useEvent('resize',windowSizeChange)  
-    useResizeObserver(windowSizeChange,document.body)
+    const routes = [
+      {name:'list',label:'Font Family',path:'/list'},
+      {name:'info',label:'info',path:'/info'},
+      {name:'table',label:'tst',path:'/tst'}
+    ]
     return {
       push,
       routeName,
-      sideToggle,
+      routes,
       setRef
     }
   }
@@ -69,11 +55,11 @@ export default {
 .side {
   position:fixed;
   z-index: 2;
-  left:0; top:0; bottom:0;
+  left:0; top:70px; bottom:0;
   width:200px;
   background-color: #fff;
   box-shadow: 0 0 2px 1px #aaa;
-  transition: transform 300ms linear;
+  transition: transform 300ms ease;
 }
 
 .head {
@@ -91,11 +77,17 @@ export default {
   padding-top: 70px;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 640px){
   .side {
     transform: translateX(-201px);
   }
   .main { left: 0; }
+  #menu-show:checked ~ .side {
+    transform: translateX(0);
+  }
+  #menu-show:checked ~ .head label i::before {
+    content: '\f00d';
+  }
 }
 
 .show {

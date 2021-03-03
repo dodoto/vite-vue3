@@ -6,16 +6,16 @@
       class="
         block
         w-24
-        bg-green-400
-        py-2 
-        text-center
+        py-2
         mx-auto
-        bg-emerald-500 
-      text-white 
-        font-semibold 
         rounded-lg 
         shadow-md 
-        hover:bg-green-500
+      bg-slategrey
+      hover:bg-gray-600
+        text-center
+      text-white 
+        font-semibold 
+        cursor-pointer
       "
     >
       upload

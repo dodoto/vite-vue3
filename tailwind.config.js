@@ -5,12 +5,11 @@ module.exports = {
     extend: {
       lineHeight: {
         '12': '3rem',
-      }
-    },
-    backgroundColor: theme => ({
-      // ...theme('colors'),
-      'slategrey': '#708090'
-    })
+      },
+      backgroundColor: {
+        'slategrey': '#708090',
+      },
+    }
   },
   variants: {
     extend: {},
