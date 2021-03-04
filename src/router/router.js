@@ -9,11 +9,6 @@ export const router = createRouter({
       component: () => import('../components/Home.vue')
     },
     {
-      path: '/tst',
-      name: 'tst',
-      component: () => import('../components/tst.vue')
-    },
-    {
       path: '/list', 
       // redirect: { to: '/list' ,path: '/list'},
       component: () => import('../components/Back.vue'),
