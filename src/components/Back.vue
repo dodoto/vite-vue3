@@ -2,11 +2,13 @@
   <div>
     <input type="checkbox" id="menu-show" class="hidden">
     <div class="side fixed left-0 bottom-0 z-10 transition-transform bg-white " :ref="setRef" >
-      <div
+      <label
+        for="menu-show"
         v-for="route of routes"
         :key="route.path" 
         @click="push(route.path)"
         class="
+          block
           uppercase 
           tracking-wide 
           font-semibold 
@@ -24,7 +26,7 @@
         "
       >
         {{route.label}}
-      </div>
+      </label>  
     </div>
     <div class="head bg-blue-400 fixed z-10 top-0 left-0 right-0">
       <div class="float-left m-4 sm:hidden  w-10 h-10 leading-10 text-center ">
