@@ -1,24 +1,23 @@
 {
-  "name": "vite-3.0",
+  "name": "vite-2.0",
   "version": "0.0.0",
   "description": "practice",
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "dependencies": {
-    "axios": "^0.21.0",
-    "spark-md5": "^3.0.1",
-    "vue": "^3.0.4",
-    "vue-router": "^4.0.1"
+    "vue": "^3.0.7",
+    "vue-router": "^4.0.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss7-compat": "^2.0.2",
-    "@vue/compiler-sfc": "^3.0.4",
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.35",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
-    "vite": "^1.0.0-rc.13"
+    "@vitejs/plugin-vue": "^1.1.5",
+    "@vue/compiler-sfc": "^3.0.7",
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.8",
+    "tailwindcss": "^2.0.4",
+    "vite": "^2.1.3"
   }
 }

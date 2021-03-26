@@ -53,7 +53,7 @@ export default {
     let { ref, setRef } = useRef()
     const routes = [
       {name:'list',label:'list',path:'/list'},
-      {name:'info',label:'info',path:'/info'},
+      {name:'info',label:'filter-glass',path:'/info'},
     ]
     return {
       push,
