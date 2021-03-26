@@ -1,5 +1,5 @@
-import aixos from 'axios';
-import SparkMD5 from 'spark-md5';
+// import aixos from 'axios';
+// import SparkMD5 from 'spark-md5';
 
 export function getReadFunc() {
   let timer = null;
@@ -74,22 +74,6 @@ export function read(target) {
     }
   
     sortOut(target);
-
-    // let loop = function() {
-    //   readFolder(qeue[index])
-    //   .then(res => next(res))
-    //   .then(res => loop())
-    //   .catch(err => {
-    //     if(err === 'over'){
-    //       resolve({uploadList,folders})
-    //     }else{
-    //       // console.log(err)
-    //       reject('read failed')
-    //     }
-    //   })
-    // }
-
-    // loop();
   
     readFolder(qeue[index])
     .then(res => next(res))
