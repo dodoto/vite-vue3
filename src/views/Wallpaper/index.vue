@@ -8,7 +8,7 @@
 
 import { read, getReadFunc } from '@/components/upload-utils.js'
 
-import { onBeforeUnmount, onMounted } from 'vue'
+import { useEvent } from '@/hooks/event/index.js'
 
 const dragoverHandler = (e) => {
   e.preventDefault()
@@ -18,11 +18,12 @@ const dragoverHandler = (e) => {
 const dropHandler = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  let files = Array.from(e.dataTransfer.files)
+  // let files = Array.from(e.dataTransfer.files)
   let items = Array.from(e.dataTransfer.items)
   items.forEach((item,index) => {
     let target = item.webkitGetAsEntry()
-    let name = files[index].name
+    // let name = files[index].name
+    // console.log(name)
     // this.uploadItems.push({name,target})
     let test = getReadFunc()
     test([target],test)
@@ -30,15 +31,9 @@ const dropHandler = (e) => {
   })
 }
 
-onBeforeUnmount(()=>{
-  document.removeEventListener('dragover',dragoverHandler,false)
-  document.removeEventListener('drop',dropHandler,false)
-})
+useEvent('dragover',dragoverHandler)
 
-onMounted(()=>{
-  document.addEventListener('dragover',dragoverHandler,false)
-  document.addEventListener('drop',dropHandler,false)
-})
+useEvent('drop',dropHandler)
 
 </script>
 

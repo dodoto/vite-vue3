@@ -10,6 +10,11 @@ const Router = createRouter({
       component: () => import('@/views/Wallpaper/index.vue')
     },
     {
+      path: '/polygon',
+      name: 'polygon',
+      component: _ => import('@/views/Polygon/index.vue')
+    },
+    {
       path: '/:w+',
       component: () => import('../components/NotFound.vue')
     }

@@ -5,6 +5,25 @@
 @tailwind components;
 @tailwind utilities;
 
-* { margin: 0; padding: 0; }
+* { 
+  padding: 0;
+  margin: 0;
+}
 
-html, body, #app { height: 100% }
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+:root body {
+  position: absolute;
+}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}

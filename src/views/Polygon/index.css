@@ -1,0 +1,85 @@
+
+.block1 {
+  width: 800px;
+  height: 800px;
+  left: -100px;
+  top: -15rem;
+  background-image: linear-gradient(to bottom right, #183de7, #48cffe 80%);
+  clip-path: inset(0 0 0 0 round 100px);
+  z-index: 1;
+}
+.block2 {
+  width: 1200px;
+  height: 1200px;
+  left: 10%;
+  top: -18%;
+  clip-path: inset(0 0 0 0 round 100px);
+  background-image: linear-gradient(to bottom right, #183de7, #48cffe 80%);
+  transform: rotate(45deg);
+  z-index: 1;
+}
+.block3 {
+  width: 960px;
+  height: 960px;
+  left: 10%;
+  top: -30rem;
+  border-radius: 50%/100% 0;
+  background: #00ffff;
+  z-index: 1;
+}
+.block4 {
+  width: 440px;
+  height: 440px;
+  right: -280px;
+  bottom: 60px;
+  clip-path: circle();
+  background-image: linear-gradient(to right, #0db54c, #049fbb 40%);
+  z-index: 1;
+}
+.block5 {
+  width: 1374px;
+  height: 1184px;
+  right: -30rem;
+  top: -30rem;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  background-image: linear-gradient(to right, #f76b71, #ce4d8b 60%);
+  z-index: 0;
+}
+.ani1 {
+  animation: spin2 360s linear infinite;
+}
+
+.ani2 {
+  animation: spin1 500s linear infinite;
+}
+
+.ani3 {
+  animation: spin1 720s linear infinite;
+}
+
+.ani4 {
+  animation: spin1 960s linear infinite;
+}
+
+@keyframes spin1 {
+  100% {
+    transform: rotate(360deg);
+    transform-origin: 50% 50%;
+  }
+}
+
+@keyframes spin2 {
+  100% {
+    transform: rotate(-360deg);
+    transform-origin: 50% 50%;
+  }
+}
+
+.five-star {
+  transition: all 300ms linear;
+  clip-path: polygon(50% 0,65% 40%, 100% 40%,72% 60%,85% 100%,50% 75%,15% 100%,28% 60%,0 40%,35% 40%);
+}
+
+.five-star:hover {
+  clip-path: polygon(0 0, 25% 0, 50% 0, 75% 0, 100% 0, 100% 100%, 75% 100%, 50% 100%, 25% 100%, 0 100%);
+}

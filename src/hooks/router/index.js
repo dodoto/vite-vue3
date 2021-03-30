@@ -9,7 +9,7 @@ export function usePush() {
 
 export function useRouteName() {
   const route = useRoute()
-  const routeName = computed(()=> route.name)
+  const routeName = computed(() => route.name)
   return routeName
 }
 
