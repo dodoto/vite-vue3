@@ -15,6 +15,11 @@ const Router = createRouter({
       component: _ => import('@/views/Polygon/index.vue')
     },
     {
+      path: '/live',
+      name: 'live',
+      component: _ => import('@/views/Live/index.vue')
+    },
+    {
       path: '/:w+',
       component: () => import('../components/NotFound.vue')
     }
