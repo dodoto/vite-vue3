@@ -1,6 +1,6 @@
 <template>
   <div class="wallpaper">
-    <img src="@/assets/wallpaper.jpg" alt="" style="width:100%">
+    <img src="@/assets/wallpaper.jpg" alt="">
   </div>
 </template>
 

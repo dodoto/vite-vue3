@@ -106,6 +106,7 @@ const reset = (index,top) => {
         testData.value = [
           {text: `this is data ${+new Date()}`},
         ]
+        state.value.activeIndex = 0
       },2000)
       setTimeout(() => {
         state.value.isAnimating = false
@@ -135,7 +136,7 @@ const reset = (index,top) => {
 }
 
 const touchStart = e => {
-  if(!refreshing.value) {
+  // if(!refreshing.value) {
     e.preventDefault()
 
     const { top } = state.value
@@ -145,11 +146,10 @@ const touchStart = e => {
     startTop = curTouch.clientY - top
 
     emits('onDragStart')
-  }  
+  // }  
 }
 
 const touchMove = e => {
-  if(!refreshing.value) {
     e.preventDefault()
     const { activeIndex } = state.value
     let curTouch = e.touches[0]
@@ -161,11 +161,9 @@ const touchMove = e => {
       state.value.top = -100 
     }
     emits('onDragMove',state.value.top)
-  }
 }
 
 const touchCancel = e => {
-  if(!refreshing.value) {
     const { top, activeIndex } = state.value
     emits('onDragStop',top)
     state.value.isAnimating = true
@@ -183,7 +181,6 @@ const touchCancel = e => {
     }
 
     reset(-1,top)
-  }
 }
 
 </script>

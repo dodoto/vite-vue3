@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { ref, onBeforeUpdate, onUpdated, toRefs, reactive, nextTick } from 'vue';
-import { useRefs } from '../hooks/ref/index';
+import { ref, reactive, nextTick } from 'vue';
+import { useRefs } from '@/hooks/ref/index';
 import ListItem from './ListItem.vue';
 export default {
   components: { ListItem },

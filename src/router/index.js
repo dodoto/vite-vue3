@@ -5,8 +5,25 @@ const Router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/', 
+      path: '/',
       name: 'home',
+      component: () => import('@/views/Home/index.vue'),
+      redirect: '/filter',
+      children: [
+        {
+          path: '/filter',
+          name: 'filter',
+          component: () => import('@/views/Home/component/Filter.vue')
+        },
+        {
+          path: '/:w+',
+          component: () => import('../components/NotFound.vue')
+        }
+      ]
+    },
+    {
+      path: '/wallpaper', 
+      name: 'wallpaper',
       component: () => import('@/views/Wallpaper/index.vue')
     },
     {

@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 		.filter-blur {
-			background-image: url('../assets/wallpaper.jpg');
+			background-image: url('@/assets/wallpaper.jpg');
 		}
 
 		#content-toggle:checked ~ .content {

@@ -12,7 +12,8 @@
           uppercase 
           tracking-wide 
           font-semibold 
-          pl-4 h-12 leading-12 
+          pl-4 h-10
+          leading-10
           font-sans 
           cursor-pointer 
           text-sm
@@ -36,15 +37,16 @@
       </div>
     </div>  
     <div class="main">
-      <router-view />
+      <div style="height:900px;">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { useRef } from '../hooks/ref/index'
-import { usePush, useRouteName } from '../hooks/router/index'
-import { useEvent, useResizeObserver } from '../hooks/event/index'
+import { useRef } from '@/hooks/ref/index'
+import { usePush, useRouteName } from '@/hooks/router/index'
 export default {
   name: 'Back',
   setup() {
@@ -53,7 +55,7 @@ export default {
     let { ref, setRef } = useRef()
     const routes = [
       {name:'list',label:'list',path:'/list'},
-      {name:'info',label:'filter-glass',path:'/info'},
+      {name:'filter',label:'filter',path:'/filter'},
     ]
     return {
       push,
@@ -70,7 +72,8 @@ export default {
 .side {
   top:70px;
   width:250px;
-  box-shadow: 0 3px 3px 0px gray;
+  box-shadow: 0 3px 3px 0px #aaa;
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), clip-path 150ms 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .head {
@@ -79,18 +82,19 @@ export default {
 }
 
 .main {
-  position:absolute;
-  left:250px; top:0; right:0; bottom:0;
+  padding-left: 250px;
   padding-top: 70px;
 }
 
 @media screen and (max-width: 640px){
   .side {
-    transform: translateX(-251px);
+    /* transform: translateX(-251px); */
+    clip-path: inset(0px 50% 50% 0px round 0px 0px 0px 0);;
   }
-  .main { left: 0; }
+  .main { padding-left: 0 }
   #menu-show:checked ~ .side {
-    transform: translateX(0);
+    /* transform: translateX(0); */
+    clip-path: inset(0px 0px 0px 0px round 0px 0px 0px 0px);;
   }
   #menu-show:checked ~ .head label i::before {
     content: '\f00d';
