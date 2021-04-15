@@ -130,7 +130,7 @@ const mapInit = _ => {
       zoom: 14,                                    
       center,  
       mapStyle,                     
-      features: ['bg', 'road', 'building'],                    
+      features: ['bg', 'road', 'building', 'point'],                    
       // layers: [new AMap.TileLayer.Satellite()]                               
     })
     map.on('complete',mapLoaded)
