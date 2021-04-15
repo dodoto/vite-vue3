@@ -10,20 +10,23 @@
   margin: 0;
 }
 
-html {
-  overflow-y: scroll;
-}
-
-:root {
-  overflow-y: auto;
+html, body, #app {
+  height: 100%;
   overflow-x: hidden;
 }
 
-:root body {
-  position: absolute;
+/* fade-transform */
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all .5s;
 }
 
-body {
-  width: 100vw;
-  overflow: hidden;
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }

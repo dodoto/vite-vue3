@@ -13,12 +13,7 @@ export function useRouteName() {
   return routeName
 }
 
-export function useRef() {
-  let ref = null;
-  const computedRef = computed(() => ref)
-  const setRef = el => { ref = el }
-  return {
-    computedRef,
-    setRef
-  }
+export function useRoutes() {
+  const routes = useRouter().options.routes
+  return routes
 }
