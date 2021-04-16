@@ -18,6 +18,11 @@ const Router = createRouter({
           path: '/map',
           name: 'map',
           component: _ => import('@/views/Map/index.vue')
+        },
+        {
+          path: '/pdf',
+          name: 'pdf',
+          component: _ => import('@/views/Pdf/index.vue')
         }
       ]
     },
