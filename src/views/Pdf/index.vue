@@ -10,15 +10,15 @@
     :ref="setRef"
     @scroll="scrollHandler"
   >
-    <div class="canvas-wrapper w-1/5 box-border relative m-auto" v-for="index in total" :key="index">
-      <canvas :ref="setRefs" class="w-full h-full" >不支持canvas</canvas>
+    <div class="canvas-wrapper w-4/5 box-border relative m-auto" v-for="index in total" :key="index">
+      <canvas :ref="setRefs" class="w-full" :data-index="index">不支持canvas</canvas>
     </div>
   </div>
 </template>
 
 <script setup>
 //先渲染3页, 滚动的时候再 3 页 渲染
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useNProgress } from '@/hooks/nprogress/index.js'
 import { useRefs, useRef } from '@/hooks/ref/index.js'
 import * as PDFJS from 'pdfjs-dist'
@@ -42,7 +42,7 @@ let scrollTop = 0     //滚动的高度
 
 let url = '../../../../static/222.pdf'
 
-let canvas = null
+// let canvas = null
 
 //获取pdf
 const getPdf = url => {
@@ -56,18 +56,10 @@ const getPdf = url => {
   })
 }
 //渲染pdf
-const renderPdf = _ => {
-  console.log(current)
+const renderPdf = (current,canvas) => {
   pdf.getPage(current).then(page => {
     let scale = 1.5
     let viewport = page.getViewport({scale})
-    console.log(viewport)
-    // getViewport({ scale, rotation, dontFlip })
-    if(canvas === refs[current-1]) {
-      console.log(current)
-      return
-    }
-    canvas = refs[current-1]
     let canvasContext = canvas.getContext('2d')
     canvas.height = viewport.height
     canvas.width = viewport.width
@@ -79,10 +71,13 @@ const renderPdf = _ => {
 //初始化
 const init = async _ => {
   pdf = await getPdf(url)
-  console.log(pdf)
   total.value = pdf.numPages
-  current++
-  renderPdf()
+  nextTick(_ => {
+    let canvas = refs[current]
+    console.log(canvas)
+    current = current + 1
+    renderPdf(current,canvas)
+  })
 }
 
 const scrollHandler = _ => {
@@ -100,26 +95,24 @@ const scrollHandler = _ => {
 
 onMounted(init)
 
-// onMounted(_ => {
-//   let timer = setInterval(_ => {
-//     if(current < total.value) {
-//       current++
-//       renderPdf()
-//     }else{
-//       clearInterval(timer)
-//       timer = null
-//     }
-//   },500)
-// })
+onMounted(_ => {
+  setTimeout(_ => {
+    for(let i = 2; i <= total.value; i++) {
+      nextTick(_ => {
+        let canvas = refs[current]
+        current = current + 1
+        renderPdf(current,canvas)
+      })
+    }
+  },1000)
+})
 
 
 </script>
 
 <style>
 .canvas-wrapper {
-  padding-top: 66.66666%;
-  background-color: yellow;
-  border-bottom: 1px solid gray;
+  padding-top: 53.33333%;
 }
 .canvas-wrapper canvas {
   margin-top: -66.66666%;
