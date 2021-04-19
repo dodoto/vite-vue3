@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, onBeforeUpdate, onUpdated } from 'vue'
 //ref的收集顺序是从上到下,从里到外
 export function useRef() {
   let el = null
@@ -15,6 +15,12 @@ export function useRefs() {
   const setRefs = el => {
     refs.push(el)
   }
+  onBeforeUpdate(() => {
+    refs = []
+  })
+  onUpdated(() => {
+    console.log('updated',refs)
+  })
   return {
     refs,
     setRefs

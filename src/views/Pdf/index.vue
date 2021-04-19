@@ -8,19 +8,24 @@
       overflow-y-auto
     "
     :ref="setRef"
-    @scroll="scrollHandler"
+    @scroll="debounceScroll"
   >
-    <div class="canvas-wrapper w-4/5 box-border relative m-auto" v-for="index in total" :key="index">
-      <canvas :ref="setRefs" class="w-full" :data-index="index">不支持canvas</canvas>
+    <div class="w-4/5 box-border relative m-auto overflow-hidden" v-for="index in total" :key="index" :style="{height:`${canvasHeight}px`}">
+      <canvas v-if="index >= startPage && index <= endPage" :ref="getCanvas" class="w-full" :data-page="index">不支持canvas</canvas>
+      <div v-else class="custom-loading"></div>
+      <div class="absolute top-0 left-0">第{{index}}页</div>
     </div>
   </div>
 </template>
 
 <script setup>
-//先渲染3页, 滚动的时候再 3 页 渲染
-import { nextTick, onMounted, ref } from 'vue'
+//渲染5页，之后滚动从 current - 5 到 current + 5 进行渲染
+import { computed, defineProps, nextTick, onBeforeMount, onBeforeUpdate, onMounted, onUpdated, reactive, ref, watch, watchEffect } from 'vue'
 import { useNProgress } from '@/hooks/nprogress/index.js'
+//遇到问题，自定义setRefs会娶不到refs
 import { useRefs, useRef } from '@/hooks/ref/index.js'
+import { useDebounce } from '@/hooks/debounce&throttle/index.js'
+import { useEvent } from '@/hooks/event/index.js'
 import * as PDFJS from 'pdfjs-dist'
 // import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry"
 const workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.js`
@@ -28,98 +33,144 @@ PDFJS.GlobalWorkerOptions.workerSrc = workerSrc
 
 useNProgress()
 
-const { refs, setRefs } = useRefs()
+const { url, minRender } = defineProps({
+  url: {
+    type: String,
+    default: '../../../../static/222.pdf'
+  },
+  minRender: {
+    type: Number,
+    default: 5
+  }
+})
+
+let canvas = []
+
+const getCanvas = el => canvas.push(el)
 
 const { ref:pdfContainer, setRef } = useRef()
 
-let total = ref(0)    //总页数
+let whScale = 1
 
-let current = 0       //渲染到第几页
+const PDFState = reactive({
+  pdf: null,       //pdf 实例
+  currentPage: 0,
+  canvasHeight: 0, 
+})
 
-let pdf = null        //pdf对象
+const startPage = computed(() => {
+  let index = PDFState.currentPage - minRender
+  if(index < 0) index - 0
+  return index
+})
 
-let scrollTop = 0     //滚动的高度
+const endPage = computed(() => {
+  let index = PDFState.currentPage + minRender
+  return index
+})
 
-let url = '../../../../static/222.pdf'
+const total = computed(() => {
+  const { pdf } = PDFState
+  if(!pdf) return 0
+  return pdf.numPages
+})
 
-// let canvas = null
+const canvasHeight = computed(() => PDFState.canvasHeight)
 
 //获取pdf
-const getPdf = url => {
-  return new Promise((resolve,reject) => {
-    PDFJS.getDocument(url)
-    .promise
-    .then(pdf => {
-      resolve(pdf)
-    })
-    .catch( err => reject(err))
-  })
+const getPDF = (url) => {
+  PDFJS.getDocument(url)
+  .promise
+  .then(pdf => PDFState.pdf = pdf)
+  .catch(err => console.log(err))
 }
-//渲染pdf
-const renderPdf = (current,canvas) => {
-  pdf.getPage(current).then(page => {
+
+getPDF(url)
+
+const scroll = () => {
+  let scrollTop = pdfContainer.value.scrollTop
+  let index = Math.floor(scrollTop / canvasHeight.value)
+  PDFState.currentPage = index
+}
+
+const debounceScroll = useDebounce(scroll,100,false)
+
+const resize = () => {
+  for(let item of canvas) {
+    if(item) {
+      const { width } = item.getBoundingClientRect()
+      PDFState.canvasHeight = width / whScale
+      break
+    }
+  }
+}
+
+const debounceResize = useDebounce(resize,100,false)
+
+useEvent('resize',debounceResize)
+
+onBeforeUpdate(() => {
+  canvas = []
+})
+
+const getCanvasHeight = (canvas) => {
+  const { width } = canvas.getBoundingClientRect()
+  PDFState.canvasHeight = width / whScale
+}
+//页码从1开始
+const renderPDF = (currentPage,canvas) => {
+  PDFState.pdf.getPage(currentPage)
+  .then(page => {
     let scale = 1.5
     let viewport = page.getViewport({scale})
     let canvasContext = canvas.getContext('2d')
     canvas.height = viewport.height
     canvas.width = viewport.width
-
+    whScale = viewport.width / viewport.height
+    if(!canvasHeight.value) getCanvasHeight(canvas)
     let renderContext = { canvasContext, viewport }
     page.render(renderContext)
   })
-}
-//初始化
-const init = async _ => {
-  pdf = await getPdf(url)
-  total.value = pdf.numPages
-  nextTick(_ => {
-    let canvas = refs[current]
-    console.log(canvas)
-    current = current + 1
-    renderPdf(current,canvas)
-  })
-}
+} 
 
-const scrollHandler = _ => {
-  return
-  // let _scrollTop = pdfContainer.value.scrollTop
-  // if(_scrollTop > scrollTop) {
-  //   //向下加载
-  //   if(current < total.value) {
-  //     current++
-  //     renderPdf()
-  //   }
-  //   scrollTop = _scrollTop
-  // }
-}
+watch(
+  () => PDFState.pdf,
+  () => {
+    nextTick(() => {
+      // console.log(canvas)
+      for(let index = 0; index < canvas.length;index++) {
+        renderPDF(index+1,canvas[index])
+      }
+    })
+  }
+)
 
-onMounted(init)
-
-onMounted(_ => {
-  setTimeout(_ => {
-    for(let i = 2; i <= total.value; i++) {
-      nextTick(_ => {
-        let canvas = refs[current]
-        current = current + 1
-        renderPdf(current,canvas)
+watch(
+  () => PDFState.currentPage,
+  () => {
+    let oldCanvas = canvas
+    nextTick(() => {
+      let newCanvas = canvas
+      newCanvas.forEach(item => {
+        if(!item) return
+        let has = false
+        oldCanvas.forEach(oldItem => {
+          if(item === oldItem) has = true          
+        })
+        if(!has) {
+          let index = parseInt(item.dataset.page)
+          console.log(index)
+          renderPDF(index,item)
+        }
       })
-    }
-  },1000)
-})
-
+    })
+  }
+)
 
 </script>
 
 <style>
-.canvas-wrapper {
-  padding-top: 53.33333%;
-}
-.canvas-wrapper canvas {
-  margin-top: -66.66666%;
-}
-.canvas-wrapper::after {
-  content: '';
-  display: block;
+.custom-loading {
   width: 50px; height: 50px;
   border-radius: 50%;
   border: 5px solid skyblue;
