@@ -31,6 +31,7 @@
     <div class="w-4/5 relative m-auto overflow-hidden " v-for="index in total" :key="index" :style="{height:`${canvasHeight}px`}">
       <canvas v-if="index >= startPage && index <= endPage" :ref="getCanvas" class="w-full" :data-page="index">不支持canvas</canvas>
       <div v-else class="custom-loading"></div>
+      <div class="absolute top-0 left-0">第{{index}}页</div>
       <!-- <div v-if="index >= startPage && index <= endPage" class="text-layer absolute top-0 left-0 w-full h-full"></div> -->
     </div>
   </div>
@@ -113,26 +114,28 @@ const getPDF = (url) => {
 getPDF(url)
 
 const scroll = () => {
-  //从小变大会触发 scroll
   let scrollTop = pdfContainer.value.scrollTop
   let index = Math.ceil(scrollTop / canvasHeight.value)
-  console.log(index)
   PDFState.currentPage = index
 }
 
 const debounceScroll = useDebounce(scroll,100,false)
 
-const keepPosition = (oldHeight,oldScrollTop) => {
-  let scale = oldHeight / PDFState.canvasHeight
-  const container = pdfContainer.value
-  let newScrollTop = newScrollTop = oldScrollTop / scale
+const keepPosition = (scale) => {
   //scrollTo是绝对滚动（以view的内容的中心为原点），而scrollBy是相对滚动 会在原来基础上叠加
-  container.scrollTo(0,newScrollTop)
+  let { currentPage, canvasHeight } = PDFState
+  let container = pdfContainer.value
+  let newScrollTop = canvasHeight * scale
+  //放到nextTick中滚动
+  nextTick(() => {
+    container.scrollTo(0,newScrollTop)
+  })
 }
 
 const resize = () => {
+  let oldScrollTop = pdfContainer.value.scrollTop
   let oldHeight = PDFState.canvasHeight
-  let oldScrollTop = container.scrollTop
+  let scale = oldScrollTop / oldHeight
   //重置高度
   for(let item of canvas) {
     if(item) {
@@ -141,9 +144,7 @@ const resize = () => {
       break
     }
   }
-  // nextTick(() => {
-    keepPosition(oldHeight,oldScrollTop)
-  // })
+  keepPosition(scale)
 }
 
 const debounceResize = useDebounce(resize,100,false)
@@ -172,7 +173,7 @@ const renderTextLayer = (textContent,el,viewport) => {
 const renderPDF = (currentPage,canvas) => {
   PDFState.pdf.getPage(currentPage)
   .then(page => {
-    let scale = 1
+    let scale = 1.5
     let viewport = page.getViewport({scale})
     let canvasContext = canvas.getContext('2d')
     canvas.height = viewport.height
