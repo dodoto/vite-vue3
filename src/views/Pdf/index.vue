@@ -113,24 +113,26 @@ const getPDF = (url) => {
 getPDF(url)
 
 const scroll = () => {
+  //从小变大会触发 scroll
   let scrollTop = pdfContainer.value.scrollTop
-  let index = Math.floor(scrollTop / canvasHeight.value)
+  let index = Math.ceil(scrollTop / canvasHeight.value)
+  console.log(index)
   PDFState.currentPage = index
 }
 
 const debounceScroll = useDebounce(scroll,100,false)
 
-const keepPosition = (oldHeight) => {
+const keepPosition = (oldHeight,oldScrollTop) => {
   let scale = oldHeight / PDFState.canvasHeight
   const container = pdfContainer.value
-  let scrollTop = container.scrollTop
-  let newScrollTop = scrollTop / scale
+  let newScrollTop = newScrollTop = oldScrollTop / scale
   //scrollTo是绝对滚动（以view的内容的中心为原点），而scrollBy是相对滚动 会在原来基础上叠加
   container.scrollTo(0,newScrollTop)
 }
 
 const resize = () => {
   let oldHeight = PDFState.canvasHeight
+  let oldScrollTop = container.scrollTop
   //重置高度
   for(let item of canvas) {
     if(item) {
@@ -139,9 +141,9 @@ const resize = () => {
       break
     }
   }
-  nextTick(() => {
-    keepPosition(oldHeight)
-  })
+  // nextTick(() => {
+    keepPosition(oldHeight,oldScrollTop)
+  // })
 }
 
 const debounceResize = useDebounce(resize,100,false)
