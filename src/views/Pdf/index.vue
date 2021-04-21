@@ -50,6 +50,8 @@ import * as PDFJS from 'pdfjs-dist'
 const workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version}/pdf.worker.js`
 PDFJS.GlobalWorkerOptions.workerSrc = workerSrc
 
+const CSS_UNITS = 96.0 / 72.0
+
 useNProgress()
 
 const { url, minRender } = defineProps({
@@ -123,7 +125,7 @@ const debounceScroll = useDebounce(scroll,100,false)
 
 const keepPosition = (scale) => {
   //scrollTo是绝对滚动（以view的内容的中心为原点），而scrollBy是相对滚动 会在原来基础上叠加
-  let { currentPage, canvasHeight } = PDFState
+  let { canvasHeight } = PDFState
   let container = pdfContainer.value
   let newScrollTop = canvasHeight * scale
   //放到nextTick中滚动
@@ -176,11 +178,15 @@ const renderPDF = (currentPage,canvas) => {
     let scale = 1.5
     let viewport = page.getViewport({scale})
     let canvasContext = canvas.getContext('2d')
-    canvas.height = viewport.height
-    canvas.width = viewport.width
+    canvas.height = viewport.height * CSS_UNITS
+    canvas.width = viewport.width * CSS_UNITS
     whScale = viewport.width / viewport.height
     if(!canvasHeight.value) getCanvasHeight(canvas)
-    let renderContext = { canvasContext, viewport }
+    let renderContext = { 
+      viewport,
+      canvasContext, 
+      transform: [CSS_UNITS, 0, 0, CSS_UNITS, 0, 0]
+     }
     page.render(renderContext)     //下面开始渲染文字图层
     // .promise
     // .then(() => page.getTextContent())
