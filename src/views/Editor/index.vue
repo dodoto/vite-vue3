@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-4 px-4 pb-60 h-full box-border min-h-min">
+  <div class="pt-4 px-4 pb-60 h-full box-border min-h-min overflow-auto">
     <div :innerHTML="content.html" class="p-3 break-all border-gray-200 border h-full bg-white"></div>
     <div :ref="setRefs" class="h-60 -mb-60 pt-4">
     </div>

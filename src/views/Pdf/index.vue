@@ -4,8 +4,7 @@
       h-full 
       p-4 
       box-border 
-      overflow-x-hidden 
-      overflow-y-auto
+      overflow-auto
     "
     :ref="setRef"
     @scroll="debounceScroll"

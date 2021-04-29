@@ -1,5 +1,28 @@
 import { createWebHashHistory, createRouter } from 'vue-router'
 
+const components = [
+  {
+    path: '/editor',
+    name: 'editor',
+    component: _ => import('@/views/Editor/index.vue')
+  },
+  {
+    path: '/map',
+    name: 'map',
+    component: _ => import('@/views/Map/index.vue')
+  },
+  {
+    path: '/pdf',
+    name: 'pdf',
+    component: _ => import('@/views/Pdf/index.vue')
+  },
+  {
+    path: 'code-block',
+    name: 'codeblock',
+    component: _ => import('@/views/CodeBlock/index.vue')
+  }
+]
+
 const Router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -8,23 +31,7 @@ const Router = createRouter({
       name: 'home',
       component: _ => import('@/layout/index.vue'),
       redirect: '/editor',
-      children: [
-        {
-          path: '/editor',
-          name: 'editor',
-          component: _ => import('@/views/Editor/index.vue')
-        },
-        {
-          path: '/map',
-          name: 'map',
-          component: _ => import('@/views/Map/index.vue')
-        },
-        {
-          path: '/pdf',
-          name: 'pdf',
-          component: _ => import('@/views/Pdf/index.vue')
-        }
-      ]
+      children: components
     },
     // {
     //   path: '/',

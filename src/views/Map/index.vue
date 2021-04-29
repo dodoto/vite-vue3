@@ -37,7 +37,7 @@
 
 <script setup>
 import AMapLoader from "@amap/amap-jsapi-loader"
-import { onMounted, defineProps, onUnmounted, ref } from 'vue'
+import { onMounted, defineProps, ref, nextTick, onBeforeUnmount } from 'vue'
 import { NPdone } from '@/hooks/nprogress/index.js'
 
 //定义属性
@@ -144,20 +144,24 @@ const mapInit = _ => {
 const mapDestroy = _ => {
   map?.destroy()
   // 搜索结果div没有移除
-  let child = document.getElementsByClassName('amap-sug-result')[0]
-  let body = document.body
-  body.removeChild(child)
+  nextTick(() => {
+    let child = document.getElementsByClassName('amap-sug-result')[0]
+    let body = document.body
+    if(child) body.removeChild(child)
+  })
 }
 
 onMounted(mapInit)
 
-onUnmounted(mapDestroy)
+onBeforeUnmount(mapDestroy)
+
+// onUnmounted()
 </script>
 
 <style>
 
 .amap-sug-result {
-  border-color: transparent;
+  border-width: 0;
   --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   border-radius: 0.5rem;
