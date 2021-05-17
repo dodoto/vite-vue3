@@ -33,6 +33,11 @@ const Router = createRouter({
       redirect: '/editor',
       children: components
     },
+    {
+      path: '/wallpaper',
+      name: 'wallpaper',
+      component: () => import('@/views/Wallpaper/index.vue')
+    },
     // {
     //   path: '/',
     //   name: 'home',

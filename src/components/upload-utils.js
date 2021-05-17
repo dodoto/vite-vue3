@@ -31,9 +31,21 @@ export function getReadFunc() {
   }
 }
 
+let getPathAndName = function(fullPath) {
+  let pathArray = fullPath.split('/')
+  let len = pathArray.length
+  let name = pathArray.splice(len-1,1)[0]
+  let parentPath = pathArray.join('/')
+  return {
+    parentPath,
+    name
+  }  
+} 
+
 
 export function read(target) {
   return new Promise((resolve,reject) => {
+    let result = [];             //存放平铺的数据
     let index = 0;               //当前读取的目录下标
     let qeue = [];               //目录数组
     let uploadList = [];         //上传的文件  
@@ -42,21 +54,44 @@ export function read(target) {
     //归类
     let sortOut = function(target) {
       if(target.isFile) {
+        let { parentPath, name } = getPathAndName(target.fullPath)
+        let index = result.length;
+        let file = {name,isFile:true,file:null,parentPath}
+        result.push(file)
         target.file(file=>{
+          result[index].file = file;
           uploadList.push({file,parentPath:target.fullPath});
         });
       }else{
+        // 去掉注释就变成深度
+        //关系: a 里有 b 和 c, b 里有 d
+        //不去掉注释 a - b - c - d
+        //去掉注释 a - c - d - b
         folders.push(target.fullPath);
+        // let tail = qeue.splice(index+1);
         qeue.push(target);
+        // qeue = qeue.concat(tail);
       };
     }
-    
+
+    let multi = function(entries) {
+      if(entries.length > 1) {
+        entries.forEach(entry => sortOut(entry))
+      }else{
+        sortOut(entries[0])
+      }
+    }   
+
     //读取目录
     let readFolder = function(target) {
+      // console.log(folders[index])
       return new Promise((resolve,reject) => {
         if(!target) {
           reject('over')
         }else{
+          // result.push(folders[index])
+          let { parentPath, name } = getPathAndName(target.fullPath)
+          result.push({name,isFile:false,parentPath})
           let reader = target.createReader();
           reader.readEntries(
             entries => resolve(next(entries)),
@@ -73,13 +108,17 @@ export function read(target) {
       return readFolder(target)
     }
   
-    sortOut(target);
+    // sortOut(target);
+    multi(target)
   
     readFolder(qeue[index])
     .then(res => next(res))
     .catch(err => {
       if(err === 'over') {
-        resolve({uploadList,folders});
+        // console.log(result)
+        // resolve({uploadList,folders});
+        // console.log(uploadList)
+        resolve(result)
       }else{
         reject('read failed');
       }
