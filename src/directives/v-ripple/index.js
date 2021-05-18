@@ -1,6 +1,6 @@
 import './ripple.css'
 
-export const ripple = {
+const ripple = {
   name: 'ripple',
   config: {
     mounted(btn) {
@@ -46,6 +46,12 @@ export const ripple = {
       }
     }
   }  
+}
+
+export default {
+  install(app) {
+    app.directive(...ripple)
+  }
 }
 
 // js 默认对象不包含 迭代器, 如有需要自行添加

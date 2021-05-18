@@ -114,7 +114,8 @@ export function read(target) {
     let next = function(entries,reader) {
       // console.log(entries.length)
       entries.forEach(entry => sortOut(entry));
-      //每次最长返回100,需要重复读取,直至读取长度小于100
+      //chromium 每次最长返回100,需要重复读取,直至读取长度小于100
+      //firefox 返回全部
       if(entries.length === 100) {
         return repeatRead(reader)
       }else{

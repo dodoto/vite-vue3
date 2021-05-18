@@ -1,15 +1,18 @@
 <template>
-  <div class="wallpaper">
+  <div class="wallpaper" @dragover="dragoverHandler" @drop="dropHandler">
     <img src="@/assets/wallpaper.jpg" alt="">
-    <button @click="testAlert">click to alert</button>
+    <ModalLoading :show="show" :tip="'Reading Folder...'"/>
   </div>
 </template>
 
 <script setup>
-
+//firefox 直接将drop事件挂载window下并不会阻止默认事件发生
 import { read } from '@/components/upload-utils.js'
+import ModalLoading from '@/components/ModalLoading.vue'
+import { ref } from 'vue'
+import { load } from '@amap/amap-jsapi-loader'
 
-import { useEvent } from '@/hooks/event/index.js'
+const show = ref(false)
 
 const dragoverHandler = (e) => {
   e.preventDefault()
@@ -22,6 +25,7 @@ const dropHandler = (e) => {
   e.preventDefault()
   e.stopPropagation()
   // let files = Array.from(e.dataTransfer.files)
+  show.value = true
   let items = Array.from(e.dataTransfer.items)
   // items.forEach((item,index) => {
   //   let target = item.webkitGetAsEntry()
@@ -34,14 +38,15 @@ const dropHandler = (e) => {
   //   read(target).then(res => console.log(res)).catch(err => console.log(err))
   // })
   let entries = items.map(item => item.webkitGetAsEntry())
-  read(entries).then(res => console.log(res)).catch(err => console.log(err))
+  read(entries)
+  .then(res => console.log(res))
+  .catch(err => console.log(err))
+  .finally(() => setTimeout(() => {
+    show.value = false
+  },500))
   // console.log(e.dataTransfer.files)
   // read(e.dataTransfer.files).then(res => console.log(res)).catch(err => console.log(err))
 }
-
-useEvent('dragover',dragoverHandler)
-
-useEvent('drop',dropHandler)
 
 </script>
 

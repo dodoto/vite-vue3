@@ -5,6 +5,7 @@ import { onMounted } from 'vue'
 
 NProgress.configure({ easing: 'ease', speed: 500 })
 
+//路由跳转才生效,直接地址栏输入不会生效
 Router.beforeEach(_ => {
   NProgress.start()
 })
