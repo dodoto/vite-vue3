@@ -1,12 +1,13 @@
 <template>
   <div class="wallpaper">
     <img src="@/assets/wallpaper.jpg" alt="">
+    <button @click="testAlert">click to alert</button>
   </div>
 </template>
 
 <script setup>
 
-import { read, getReadFunc } from '@/components/upload-utils.js'
+import { read } from '@/components/upload-utils.js'
 
 import { useEvent } from '@/hooks/event/index.js'
 
@@ -14,6 +15,8 @@ const dragoverHandler = (e) => {
   e.preventDefault()
   e.stopPropagation()
 }
+
+const testAlert = () => alert(1)
 
 const dropHandler = (e) => {
   e.preventDefault()

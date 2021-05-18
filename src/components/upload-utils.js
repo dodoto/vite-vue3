@@ -44,6 +44,7 @@ let getPathAndName = function(fullPath) {
 
 
 export function read(target) {
+  // console.log(+new Date())
   return new Promise((resolve,reject) => {
     let result = [];             //存放平铺的数据
     let index = 0;               //当前读取的目录下标
@@ -89,23 +90,38 @@ export function read(target) {
         if(!target) {
           reject('over')
         }else{
-          // result.push(folders[index])
           let { parentPath, name } = getPathAndName(target.fullPath)
           result.push({name,isFile:false,parentPath})
           let reader = target.createReader();
           reader.readEntries(
-            entries => resolve(next(entries)),
+            entries => resolve(next(entries,reader)),
             error => reject(error)
           );
         };
       });
     }
+
+    //重复读取
+    let repeatRead = function(reader) {
+      return new Promise((resolve,reject) => {
+        reader.readEntries(
+          entries => resolve(next(entries,reader)),
+          error => reject(error)
+        );
+      })
+    }
     
-    let next = function(entries) {
+    let next = function(entries,reader) {
+      // console.log(entries.length)
       entries.forEach(entry => sortOut(entry));
-      index++;
-      let target = qeue[index];
-      return readFolder(target)
+      //每次最长返回100,需要重复读取,直至读取长度小于100
+      if(entries.length === 100) {
+        return repeatRead(reader)
+      }else{
+        index++;
+        let target = qeue[index];
+        return readFolder(target)
+      }
     }
   
     // sortOut(target);
@@ -117,7 +133,9 @@ export function read(target) {
       if(err === 'over') {
         // console.log(result)
         // resolve({uploadList,folders});
+        // console.log(+new Date())
         // console.log(uploadList)
+        // console.log(folders)
         resolve(result)
       }else{
         reject('read failed');
@@ -155,7 +173,6 @@ export function fileSlice(file,size = 1024*1024) {
 function computedMD5(file) {
   return new Promise((resolve,reject) => {
     let fileReader = new FileReader();
-    
     fileReader.readAsArrayBuffer(file);
     fileReader.onload = e => {
       if (file.size != e.target.result.byteLength) {
