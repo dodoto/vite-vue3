@@ -1,7 +1,7 @@
 <template>
   <div class="wallpaper" @dragover="dragoverHandler" @drop="dropHandler">
     <img src="@/assets/wallpaper.jpg" alt="">
-    <ModalLoading :show="show" :tip="'Reading Folder...'"/>
+    <ModalLoading :show="show" :tip="tip"/>
   </div>
 </template>
 
@@ -13,6 +13,12 @@ import { ref } from 'vue'
 import { load } from '@amap/amap-jsapi-loader'
 
 const show = ref(false)
+
+const tip = ref('')
+
+const readHandler = () => {
+  tip.value = tip.value + 1
+}
 
 const dragoverHandler = (e) => {
   e.preventDefault()
@@ -38,14 +44,18 @@ const dropHandler = (e) => {
   //   read(target).then(res => console.log(res)).catch(err => console.log(err))
   // })
   let entries = items.map(item => item.webkitGetAsEntry())
-  read(entries)
-  .then(res => console.log(res))
-  .catch(err => console.log(err))
+  read(entries,1000,readHandler)
+  .then(res => {
+    console.log(res)
+    tip.value = 'Reading Complete!'
+  })
+  .catch(err => {
+    console.log(err)
+    tip.value = 'Reading Failed!'
+  })
   .finally(() => setTimeout(() => {
     show.value = false
-  },500))
-  // console.log(e.dataTransfer.files)
-  // read(e.dataTransfer.files).then(res => console.log(res)).catch(err => console.log(err))
+  },1000))
 }
 
 </script>

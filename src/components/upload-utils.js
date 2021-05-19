@@ -43,7 +43,7 @@ let getPathAndName = function(fullPath) {
 } 
 
 
-export function read(target) {
+export function read(target,max,handler) {
   // console.log(+new Date())
   return new Promise((resolve,reject) => {
     let result = [];             //存放平铺的数据
@@ -54,8 +54,13 @@ export function read(target) {
   
     //归类
     let sortOut = function(target) {
+      if(result.length === max) {
+        reject(`more than ${max}`)
+        return
+      }
+      handler()
+      let { parentPath, name } = getPathAndName(target.fullPath)
       if(target.isFile) {
-        let { parentPath, name } = getPathAndName(target.fullPath)
         let index = result.length;
         let file = {name,isFile:true,file:null,parentPath}
         result.push(file)
@@ -72,6 +77,7 @@ export function read(target) {
         // let tail = qeue.splice(index+1);
         qeue.push(target);
         // qeue = qeue.concat(tail);
+        result.push({name,isFile:false,parentPath})
       };
     }
 
@@ -90,8 +96,6 @@ export function read(target) {
         if(!target) {
           reject('over')
         }else{
-          let { parentPath, name } = getPathAndName(target.fullPath)
-          result.push({name,isFile:false,parentPath})
           let reader = target.createReader();
           reader.readEntries(
             entries => resolve(next(entries,reader)),
