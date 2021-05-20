@@ -10,7 +10,6 @@
 import Editor from 'wangeditor'
 import { onMounted, onBeforeUnmount, reactive } from 'vue'
 import { useRefs } from '@/hooks/ref/index.js'
-import { useNProgress } from '@/hooks/nprogress/index.js'
 
 const { refs, setRefs } = useRefs()
 
@@ -20,8 +19,6 @@ const content = reactive({
 });
 
 let editor = null
-
-useNProgress()
 
 onMounted(_ => {
   editor = new Editor(refs[0])

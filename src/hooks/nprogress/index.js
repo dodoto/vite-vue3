@@ -1,19 +1,20 @@
-import NProgress, { done } from 'nprogress'
+import NProgress from 'nprogress'
 import './nprogress.css'
-import Router from '@/router/index.js'
 import { onMounted } from 'vue'
+import Store from '@/store/index.js'
 
 NProgress.configure({ easing: 'ease', speed: 500 })
 
-//第一次不生效
-Router.beforeEach(_ => {
+export const NPstart = () => {
+  Store.dispatch('_beginLoading')
   NProgress.start()
-})
-
-export const useNProgress = _ => {
-  onMounted(_ => {
-    NProgress.done()
-  })
 }
 
-export const NPdone = _ => NProgress.done()
+export const NPdone = () => {
+  Store.dispatch('_endLoading')
+  NProgress.done()
+}
+
+export const useNProgress = _ => {
+  onMounted(() => NPdone())
+}

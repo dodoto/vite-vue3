@@ -1,6 +1,6 @@
 <template>
   <div class="wallpaper" @dragover="dragoverHandler" @drop="dropHandler">
-    <img src="@/assets/wallpaper.jpg" alt="">
+    <img src="@/assets/wallpaper.jpg" alt="wallpaper">
     <ModalLoading :show="show" :tip="tip"/>
   </div>
 </template>
@@ -10,7 +10,6 @@
 import { read } from '@/components/upload-utils.js'
 import ModalLoading from '@/components/ModalLoading.vue'
 import { ref } from 'vue'
-import { load } from '@amap/amap-jsapi-loader'
 
 const show = ref(false)
 
@@ -51,7 +50,7 @@ const dropHandler = (e) => {
   })
   .catch(err => {
     console.log(err)
-    tip.value = 'Reading Failed!'
+    tip.value = `Reading Failed! ${err}`
   })
   .finally(() => setTimeout(() => {
     show.value = false

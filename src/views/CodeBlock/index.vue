@@ -12,7 +12,6 @@
 
 <script setup>
 import { computed, defineProps, nextTick, onMounted } from 'vue'
-import { useNProgress } from '@/hooks/nprogress/index.js'
 
 const props = defineProps({
   codeLang: {
@@ -47,8 +46,6 @@ const props = defineProps({
 const lang = computed(() => `language-${props.codeLang}`)
 
 const code = computed(() => props.code)
-
-useNProgress()
 
 const highlight = () => {
   nextTick(() => {

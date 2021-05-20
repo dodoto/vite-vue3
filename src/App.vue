@@ -1,5 +1,6 @@
 <template>
   <router-view />
+  <GlobalLoading :loading="loading"/>
 </template>
 
 <script setup>
@@ -13,6 +14,13 @@ import 'prismjs/themes/prism-okaidia.css'
 import 'prismjs/plugins/line-numbers/prism-line-numbers'
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
 import 'prismjs/plugins/copy-to-clipboard/prism-copy-to-clipboard'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+const store = useStore()
+
+const loading = computed(() => store.state.globalLoading)
+
 </script>
 
 <style>

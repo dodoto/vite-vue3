@@ -133,7 +133,7 @@ const mapInit = _ => {
       features: ['bg', 'road', 'building', 'point'],                    
       // layers: [new AMap.TileLayer.Satellite()]                               
     })
-    map.on('complete',mapLoaded)
+    // map.on('complete',mapLoaded)
 
     mapGeolocation()
 

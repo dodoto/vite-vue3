@@ -43,3 +43,9 @@ html, body, #app {
 .fade-leave-to {
   opacity: 0;
 }
+
+/* loading animation */
+@keyframes sk-bounce {
+  0%, 100% { transform: scale(0.0) }
+  50% { transform: scale(1.0) }
+}

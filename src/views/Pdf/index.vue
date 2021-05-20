@@ -39,7 +39,6 @@
 <script setup>
 //渲染5页，之后滚动从 current - 5 到 current + 5 进行渲染
 import { computed, defineProps, nextTick, onBeforeMount, onBeforeUpdate, onMounted, onUpdated, reactive, ref, watch, watchEffect } from 'vue'
-import { useNProgress } from '@/hooks/nprogress/index.js'
 //遇到问题，自定义setRefs会取不到refs
 import { useRefs, useRef } from '@/hooks/ref/index.js'
 import { useDebounce } from '@/hooks/debounce&throttle/index.js'
@@ -50,8 +49,6 @@ const workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS.version
 PDFJS.GlobalWorkerOptions.workerSrc = workerSrc
 
 const CSS_UNITS = 96.0 / 72.0
-
-useNProgress()
 
 const { url, minRender } = defineProps({
   url: {

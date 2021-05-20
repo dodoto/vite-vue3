@@ -23,7 +23,7 @@
         'text-white bg-blue-400' :
         'text-gray-300 hover:text-gray-400 '
       "
-      @click="push(route.path)"
+      @click="push({name:route.name})"
     >
       {{route.name}}
     </div>

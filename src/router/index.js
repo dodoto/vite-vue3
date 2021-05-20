@@ -1,5 +1,7 @@
 import { createWebHashHistory, createRouter } from 'vue-router'
 
+import { NPstart, NPdone } from '@/hooks/nprogress/index.js'
+
 const components = [
   {
     path: '/editor',
@@ -7,7 +9,7 @@ const components = [
     component: _ => import('@/views/Editor/index.vue')
   },
   {
-    path: '/map',
+    path: '/map/:test*',
     name: 'map',
     component: _ => import('@/views/Map/index.vue')
   },
@@ -76,5 +78,17 @@ const Router = createRouter({
     }
   ]
 })
+
+Router.beforeEach(() => {
+  NPstart()
+})
+
+Router.afterEach(() => {
+  setTimeout(() => {
+    NPdone()
+  },500)
+})
+
+//如果在 nprogress 页面进行 Router.beforeEach 那么刷新不会执行,第一次也不会执行
 
 export default Router
