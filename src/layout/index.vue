@@ -23,12 +23,9 @@
 // setRef 的收集顺序 从上到下, 从里到外
 import SideMenu from './component/SideMenu.vue'
 import HeaderMenu from './component/HeaderMenu.vue'
-import { nextTick, ref, watchEffect } from 'vue'
+import { ref } from 'vue'
 import { onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 import { useEvent } from '@/hooks/event/index.js'
-import { useRouteName } from '@/hooks/router/index.js'
-
-const routeName = useRouteName()
 
 const checked = ref(false)
 
@@ -42,10 +39,6 @@ useEvent('resize',resizeHandler)
 
 onBeforeRouteUpdate(_ => {
   if(checked.value) checked.value = false
-})
-
-watchEffect(_ => {
-  document.title = routeName.value
 })
 
 </script>

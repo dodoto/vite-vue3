@@ -74,6 +74,7 @@ const Router = createRouter({
     // },
     {
       path: '/:w+',
+      name: '404',
       component: () => import('../components/NotFound.vue')
     }
   ]
@@ -83,7 +84,8 @@ Router.beforeEach(() => {
   NPstart()
 })
 
-Router.afterEach(() => {
+Router.afterEach((to) => {
+  document.title = to.name
   setTimeout(() => {
     NPdone()
   },500)
